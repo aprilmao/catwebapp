@@ -1,7 +1,3 @@
-//var express = require("express");
-//var login = require('./routes/loginroutes');
-//var bodyParser = require('body-parser');
-
 // Creating mySQL connection
 var mysql = require('mysql');
 
@@ -19,74 +15,11 @@ connection.connect(function(err) {
     return;
   }
   console.log('Connected to database.');
+  connection.query("SELECT * FROM users", function(err,result,fields){
+  	if (err) throw err;
+  	console.log(result);
+  });
 });
-
-// Register users
-exports.register = function(req,res){
-  // console.log("req",req.body);
-  var today = new Date();
-  var users={
-    "first_name":req.body.first_name,
-    "last_name":req.body.last_name,
-    "email":req.body.email,
-    "password":req.body.password,
-    "created":today,
-    "modified":today
-  }
-  connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
-  if (error) {
-    console.log("error ocurred",error);
-    res.send({
-      "code":400,
-      "failed":"error ocurred"
-    })
-  }else{
-    console.log('The solution is: ', results);
-    res.send({
-      "code":200,
-      "success":"user registered sucessfully"
-        });
-  }
-  });
-}
-
-// Check if email exists in database
-exports.login = function(req,res){
-  var email= req.body.email;
-  var password = req.body.password;
-  connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
-  if (error) {
-    // console.log("error ocurred",error);
-    res.send({
-      "code":400,
-      "failed":"error ocurred"
-    })
-  }else{
-    // console.log('The solution is: ', results);
-    if(results.length >0){
-      if([0].password == password){
-        res.send({
-          "code":200,
-          "success":"login sucessfull"
-            });
-      }
-      else{
-        res.send({
-          "code":204,
-          "success":"Email and password does not match"
-            });
-      }
-    }
-    else{
-      res.send({
-        "code":204,
-        "success":"Email does not exits"
-          });
-    }
-  }
-  });
-}
-
 
 // Creating server connection
 var port = process.env.PORT || 3000,
