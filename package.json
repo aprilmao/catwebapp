@@ -1,0 +1,11 @@
+{
+  "name": "Cat-App",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+  	"mysql": "latest"
+  },
+  "scripts": {
+    "start": "node app.js"
+  }
+}
